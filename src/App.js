@@ -14,43 +14,30 @@ export default function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" >Home</Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/posts">Posts</Link>
             </li>
             <li>
-              <Link to="/users">Users</Link>
+              <Link to="/posts/1">Post</Link>
             </li>
           </ul>
         </nav>
 
         <Switch>
           {/* Прокидываем пропсы */}
-          <Route path="/" component={Home} exact />
+          <Route path="/"  component={Home} exact/>
           
-          {/* прокидываем пропсы и делаем проверки */}
-            <Route path="/users" render={(args)=>{
-              console.log(args);
-              return <Users />
-            }} 
-          />
-          {/* Прокидываем пропсы */}
-          <Route path="/about">
-            {About}
-          </Route>
-          {/*  Без прокидывания пропсов */}
-          <Route path="/test-route">
-            <About />
+          <Route path="/posts" exact >
+            <Posts />
           </Route>
           
-          {/* Ни один путь не совпал, поэтому переходим например на about */}
-          <Route>
-            <Redirect to="/about" />
+          <Route path="/posts/1">
+            <Post />
           </Route>
-
-          {/* если ни один роут не попал второй вариант
-          <Route> Page not found</Route> */}
+          
+          <Route> Page not found</Route>
 
         </Switch>
       </div>
@@ -59,14 +46,50 @@ export default function App() {
 }
 
 function Home(props) {
-  console.log(props);
   return <h2>Home</h2>;
 }
 
-function About() {
-  return <h2>About</h2>;
+function Posts() {
+  const [posts, setPosts] = React.useState([]);
+  
+  const fetchData = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    const data = await response.json();
+    setPosts(data);
+    console.log(data);  
+  }
+
+  React.useEffect(()=>{
+    fetchData();
+  }, [])
+  
+  return (
+    <div>
+      <h2>Posts</h2>
+      {posts.map(p => <li>{p.title} - {p.id}</li>)}
+    </div>
+    
+    )
 }
 
-function Users() {
-  return <h2>Users</h2>;
+function Post() {
+  const [post, setPost] = React.useState();
+  
+  const fetchData = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+    const data = await response.json();
+    setPost(data);
+    console.log(data);  
+  }
+
+  React.useEffect(()=>{
+    fetchData();
+  }, [])
+  
+  return (
+    <div>
+      <h2>Post #1</h2>
+      { post && (<>{post.title} - {post.id}</>)}
+    </div>
+    )
 }
