@@ -11,7 +11,7 @@ const Counter = ()=>{
 const Header = ()=>{
   
   return (
-    <h1 onClick={()=> setCounter(counter+1)}>counter</h1>
+    <h1>counter</h1>
   )
 }
 export default function App() {
