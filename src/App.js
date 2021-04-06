@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 
 export default function App() {
@@ -25,22 +26,40 @@ export default function App() {
         </nav>
 
         <Switch>
+          {/* Прокидываем пропсы */}
+          <Route path="/" component={Home} exact />
+          
+          {/* прокидываем пропсы и делаем проверки */}
+            <Route path="/users" render={(args)=>{
+              console.log(args);
+              return <Users />
+            }} 
+          />
+          {/* Прокидываем пропсы */}
           <Route path="/about">
+            {About}
+          </Route>
+          {/*  Без прокидывания пропсов */}
+          <Route path="/test-route">
             <About />
           </Route>
-          <Route path="/users">
-            <Users />
+          
+          {/* Ни один путь не совпал, поэтому переходим например на about */}
+          <Route>
+            <Redirect to="/about" />
           </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+
+          {/* если ни один роут не попал второй вариант
+          <Route> Page not found</Route> */}
+
         </Switch>
       </div>
     </Router>
   );
 }
 
-function Home() {
+function Home(props) {
+  console.log(props);
   return <h2>Home</h2>;
 }
 
