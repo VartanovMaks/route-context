@@ -34,13 +34,11 @@ export default function App() {
           {/* Прокидываем пропсы */}
           <Route path="/"  component={Home} exact/>
           
-          <Route path="/posts" exact >
+          <Route path="/posts">
             <Posts />
           </Route>
           
-          <Route path="/posts/:id">
-            <Post />
-          </Route>
+          
           
           <Route> Page not found</Route>
 
@@ -70,6 +68,15 @@ function Posts() {
   
   return (
     <div>
+      <Switch>
+        <Route path="/posts/:id">
+          <Post />
+        </Route>
+        <Route>
+          <Redirect to='/posts' />
+          {/* <Redirect to='/home' /> */}
+        </Route>
+      </Switch>
       <h2>Posts</h2>
       {posts.map(p => <Link to={`/posts/${p.id}`}><li>{p.title} - {p.id}</li></Link>)}
     </div>
