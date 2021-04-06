@@ -7,7 +7,8 @@ import {
   Redirect,
   useRouteMatch,
   useParams,
-  useLocation
+  useLocation,
+  useHistory
 
 } from "react-router-dom";
 
@@ -23,9 +24,9 @@ export default function App() {
             <li>
               <Link to="/posts">Posts</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/posts/1">Post</Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
 
@@ -70,7 +71,7 @@ function Posts() {
   return (
     <div>
       <h2>Posts</h2>
-      {posts.map(p => <li>{p.title} - {p.id}</li>)}
+      {posts.map(p => <Link to={`/posts/${p.id}`}><li>{p.title} - {p.id}</li></Link>)}
     </div>
     
     )
@@ -82,9 +83,10 @@ function Post(props) {
   const match = useRouteMatch();
   // const params = useParams();
   // из парамс достаем ID
-  const {id} = useParams();
   const location = useLocation();
-
+  const {id} = useParams();
+  const history = useHistory();
+  
   //console.log({match, params, location})
   
   const fetchData = async () => {
@@ -96,12 +98,14 @@ function Post(props) {
 
   React.useEffect(()=>{
     fetchData();
-  }, [])
+  }, [id])
   
   return (
     <div>
       <h2>Post #{id}</h2>
       { post && (<>{post.title} - {post.id}</>)}
+      <br/>
+      <button onClick={()=> history.push(`/posts/${+id+1}`)}> To next post</button>
     </div>
     )
 }
