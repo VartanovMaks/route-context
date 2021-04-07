@@ -24,21 +24,25 @@ const TodoContextProvider = ({children})=>{
   )
 }
 
+const TodoItem =({todo})=>{
+  // <li >
+  return(
+    <div>
+      <h4>{todo.title}</h4>
+      <p>{todo.description}</p>
+    </div>
+  )
+}
+
 const TodoList = ()=>{
   const {
     todos
   } = useContext(TodoContext)
-  console.log(todos,'from list')
 
   return (
-    <ul>
-      {todos.map(el => (
-        <li key={el.title+el.description}>
-          <h4>{el.title}</h4>
-          <p>{el.description}</p>
-        </li>
-      ))}
-    </ul>
+    <div>
+      {todos.map(el => <TodoItem key={el.title+el.description} todo={el} />)}
+    </div>
   )
 }
 
