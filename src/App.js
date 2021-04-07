@@ -46,7 +46,7 @@ const TodoContextProvider = ({children})=>{
   )
 }
 
-const TodoItem =({todo, onTodoRemove, isDoneToggle})=>{
+const TodoItem =({todo, onTodoRemove, isDoneToggle, isDone})=>{
 
   const onTodoDelete = ()=>{
     const answer= window.confirm('Do you want to delete todo?')
@@ -59,10 +59,14 @@ const TodoItem =({todo, onTodoRemove, isDoneToggle})=>{
   
   return(
     <div>
-      <h4>{todo.title}</h4>
-      <p>{todo.description}</p>
+      <div style={{
+        textDecoration: isDone ? 'line-through' :''
+      }}>
+        <h4>{todo.title}</h4>
+        <p>{todo.description}</p>
+      </div>
       <button onClick={onTodoDelete}> Remove todo</button>
-      <button onClick={onMarkIsDoneToggle}> Mark as done</button>
+      <button onClick={onMarkIsDoneToggle}> Mark as {isDone ? 'active' : 'done'}</button>
     </div>
   )
 }
@@ -79,6 +83,7 @@ const TodoList = ()=>{
   return (
     <div>
       {todos.map(el => <TodoItem 
+        isDone={doneTodos.includes(el.id)}
         isDoneToggle={isDoneToggle} 
         key={el.title+el.description}
         onTodoRemove = {onTodoRemove}
