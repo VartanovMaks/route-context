@@ -22,6 +22,7 @@ const TodoContextProvider = ({children})=>{
       return
     }
     setTodos(todos.filter(el=> el.id !== todoId))
+    setTodos(doneTodos.filter(el=> el.id !== todoId))
   }
   
   const isDoneToggle=(todoId)=>{
@@ -129,11 +130,20 @@ const AddTodo = ()=>{
 }
 
 const Header = ()=>{
+  const {
+    todos,
+    doneTodos
+  }=useContext(TodoContext)
+
   return (
     <header>
       <Link to='/'>Todo list</Link>
-      
       <Link to='/create-todo'>Create todo</Link>
+      <div style={{flex:1}} />
+      <h3 style={{marginRight: 12}}>total todos : {todos.length}</h3>
+      <h3 style={{marginRight: 12}}>active todos : {todos.length-doneTodos.length}</h3>
+      <h3 style={{marginRight: 12}}>done todos : {doneTodos.length}</h3>
+      
     </header>
   )
 }
