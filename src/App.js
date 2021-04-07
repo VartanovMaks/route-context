@@ -7,6 +7,7 @@ const TodoContext= createContext();
 
 const TodoContextProvider = ({children})=>{
   const [todos, setTodos]= useState([])
+  
   const onTodoCreate = (newTodo)=>{
     if(!newTodo || !newTodo.title || !newTodo.description){
       console.error('Wrong arguments for todo')
@@ -14,10 +15,19 @@ const TodoContextProvider = ({children})=>{
     }
     setTodos([newTodo, ...todos])
   }
+  const onTodoRemove = (todoId) =>{
+    if(!todoId) {
+      console.error('wrong todo id')
+      return
+    }
+    setTodos(todos.filter(el=> el.id !== todoId))
+  }
+
   return (
     <TodoContext.Provider value={{
       todos,
-      onTodoCreate
+      onTodoCreate,
+      onTodoRemove
     }}>
     {children}
     </TodoContext.Provider>
@@ -25,11 +35,19 @@ const TodoContextProvider = ({children})=>{
 }
 
 const TodoItem =({todo})=>{
-  // <li >
+  const {onTodoRemove}=useContext(TodoContext)
+  const onTodoDelete = ()=>{
+    const answer= window.confirm('Do you want to delete todo?')
+    if (answer) {
+      onTodoRemove(todo.id)
+    }
+
+  }
   return(
     <div>
       <h4>{todo.title}</h4>
       <p>{todo.description}</p>
+      <button onClick={onTodoDelete}> Remove todo</button>
     </div>
   )
 }
@@ -50,6 +68,7 @@ const AddTodo = ()=>{
   const [todoValues, setTodoValues]=useState({
     title:'',
     description:'',
+    id:null,
   })
 
   const {
@@ -62,12 +81,13 @@ const AddTodo = ()=>{
   )}
   const onCreate=()=>{
     //Здесь будет добавление
-    onTodoCreate(todoValues)
+    onTodoCreate({...todoValues, id:Math.random()})
 
     // А дальше идет очистка формы
     setTodoValues({
       title:'',
       description:'',
+      id:null
     })
   }
   return (
