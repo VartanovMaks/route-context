@@ -7,6 +7,7 @@ const TodoContext= createContext();
 
 const TodoContextProvider = ({children})=>{
   const [todos, setTodos]= useState([])
+  const [doneTodos, setDoneTodos]= useState([])
   
   const onTodoCreate = (newTodo)=>{
     if(!newTodo || !newTodo.title || !newTodo.description){
@@ -22,44 +23,67 @@ const TodoContextProvider = ({children})=>{
     }
     setTodos(todos.filter(el=> el.id !== todoId))
   }
+  
+  const isDoneToggle=(todoId)=>{
+    const isTodoMarkedAsDone = doneTodos.includes(todoId)
+    if (isTodoMarkedAsDone ) {
+      setDoneTodos(doneTodos.filter(id=>id !== todoId))
+      return
+    }
+    setDoneTodos([...doneTodos, todoId])
 
+  }
   return (
     <TodoContext.Provider value={{
       todos,
       onTodoCreate,
-      onTodoRemove
+      onTodoRemove,
+      isDoneToggle,
+      doneTodos
     }}>
     {children}
     </TodoContext.Provider>
   )
 }
 
-const TodoItem =({todo})=>{
-  const {onTodoRemove}=useContext(TodoContext)
+const TodoItem =({todo, onTodoRemove, isDoneToggle})=>{
+
   const onTodoDelete = ()=>{
     const answer= window.confirm('Do you want to delete todo?')
     if (answer) {
       onTodoRemove(todo.id)
     }
-
   }
+  const onMarkIsDoneToggle = ()=> isDoneToggle(todo.id)
+
+  
   return(
     <div>
       <h4>{todo.title}</h4>
       <p>{todo.description}</p>
       <button onClick={onTodoDelete}> Remove todo</button>
+      <button onClick={onMarkIsDoneToggle}> Mark as done</button>
     </div>
   )
 }
 
 const TodoList = ()=>{
   const {
-    todos
+    todos,
+    onTodoRemove,
+    isDoneToggle,
+    doneTodos
   } = useContext(TodoContext)
+  console.log(doneTodos)
 
   return (
     <div>
-      {todos.map(el => <TodoItem key={el.title+el.description} todo={el} />)}
+      {todos.map(el => <TodoItem 
+        isDoneToggle={isDoneToggle} 
+        key={el.title+el.description}
+        onTodoRemove = {onTodoRemove}
+         todo={el} 
+         />)}
     </div>
   )
 }
