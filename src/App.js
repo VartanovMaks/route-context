@@ -1,54 +1,46 @@
 import React, { createContext, useContext, useState } from 'react';
 import './App.css';
+import {Switch, BrowserRouter as Router, Route, Link} from 'react-router-dom'
+//import { Route } from 'react-router';
 
-const CounterContext = createContext();
-
-const ContextProvider = ({children})=>{
-  // Это наша компонента. Мы сами ее называем и делаем. Не стандартная
-// Здесь обявляем данные, к которым будет доступ у всех элементов обернутых
-// в CounterContext.Provider в ретерне
-  const [counter, setCounter] = useState(0);
-  const incCounter = ()=>{
-    setCounter(counter+1);
-  }
-  const decCounter = ()=>{
-    setCounter(counter-1)
-  }
-
+const TodoList = ()=>{
   return (
-    <CounterContext.Provider value={{
-      counter,
-      incCounter,
-      decCounter,
-    }}>
-    {children}
-    </CounterContext.Provider>
+    <h2> Todo list</h2>
+  )
+}
+const AddTodo = ()=>{
+  return (
+    <h2> Create todo</h2>
   )
 }
 
-const Counter = ()=>{
-  const {counter, decCounter, incCounter} = useContext(CounterContext)
-  return (
-    <>
-    <h2>Счетчик {counter}</h2>
-    <button onClick={decCounter}> decrement counter</button>
-    <button onClick={incCounter}> increment counter</button>
-    </>
-  )
-}
 const Header = ()=>{
-  //const counterContext = useContext(CounterContext) Это получение всего обхекта
-  const {counter} = useContext(CounterContext)
-
   return (
-    <h1>Header counter  {counter}</h1>
+    <header>
+      <Link to='/'>Todo list</Link>
+      
+      <Link to='/create-todo'>Create todo</Link>
+    </header>
   )
 }
+
 export default function App() {
   return (
-    <ContextProvider>
+    // 1 мписок тудушек
+    // форма создания тудушки
+    <main>
+    <Router>
       <Header />
-      <Counter />
-    </ContextProvider>
+      <Switch>
+        <Route path='/' exact>
+          <TodoList />
+        </Route>
+        <Route path='/create-todo'>
+          <AddTodo />
+        </Route>
+
+      </Switch>
+    </Router>
+    </main>
   );
 }
