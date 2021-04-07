@@ -4,6 +4,7 @@ import './App.css';
 const CounterContext = createContext();
 
 const ContextProvider = ({children})=>{
+  // Это наша компонента. Мы сами ее называем и делаем. Не стандартная
 // Здесь обявляем данные, к которым будет доступ у всех элементов обернутых
 // в CounterContext.Provider в ретерне
   const [counter, setCounter] = useState(0);
