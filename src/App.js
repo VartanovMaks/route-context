@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
+import React, { createContext } from 'react';
 import './App.css';
+
+const CounterContext = createContext();
+const ContextProvider = ({children})=>{
+// Здесь обявляем данные, к которым будет доступ у всех элементов обернутых
+// в CounterContext.Provider в ретерне
+
+  return (
+    <CounterContext>
+    {children}
+    </CounterContext>
+  )
+}
 
 const Counter = ()=>{
   const [counter, setCounter] = useState(0);
@@ -11,14 +23,14 @@ const Counter = ()=>{
 const Header = ()=>{
   
   return (
-    <h1>counter</h1>
+    <h1>Header counter </h1>
   )
 }
 export default function App() {
   return (
-    <div>
+    <ContextProvider>
       <Header />
       <Counter />
-    </div>
+    </ContextProvider>
   );
 }
