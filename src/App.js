@@ -25,8 +25,20 @@ const TodoContextProvider = ({children})=>{
 }
 
 const TodoList = ()=>{
+  const {
+    todos
+  } = useContext(TodoContext)
+  console.log(todos,'from list')
+
   return (
-    <h2> Todo list</h2>
+    <ul>
+      {todos.map(el => (
+        <li key={el.title+el.description}>
+          <h4>{el.title}</h4>
+          <p>{el.description}</p>
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -37,11 +49,8 @@ const AddTodo = ()=>{
   })
 
   const {
-    todos,
     onTodoCreate
   } = useContext(TodoContext)
-
-  console.log(todos)
 
   const onTodoChange = ({target :{name,value}}) =>{ 
     
