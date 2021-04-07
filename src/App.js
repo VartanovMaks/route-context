@@ -8,9 +8,35 @@ const TodoList = ()=>{
     <h2> Todo list</h2>
   )
 }
+
 const AddTodo = ()=>{
+  const [todoValues, setTodoValues]=useState({
+    title:'',
+    description:'',
+  })
+
+  const onTodoChange = ({target :{name,value}}) =>{ 
+    
+    setTodoValues({...todoValues, [name]:value}
+  )}
+  
+  
+  const onCreate=()=>{
+    //Здесь будет добавление
+    // А дальше идет очистка формы
+    setTodoValues({
+      title:'',
+      description:'',
+    })
+  }
+
   return (
-    <h2> Create todo</h2>
+    <div>
+      <input value={todoValues.title} onChange={onTodoChange} type='text' name='title' placeholder='input todo title' />
+      <input value={todoValues.description} onChange={onTodoChange} type='text' name='description' placeholder='input todo description' />
+      <button onClick={onCreate}>Add todo</button>
+
+    </div>
   )
 }
 
@@ -31,15 +57,16 @@ export default function App() {
     <main>
     <Router>
       <Header />
-      <Switch>
-        <Route path='/' exact>
-          <TodoList />
-        </Route>
-        <Route path='/create-todo'>
-          <AddTodo />
-        </Route>
-
-      </Switch>
+      <div style={{padding:20}}>
+        <Switch>
+          <Route path='/' exact>
+            <TodoList />
+          </Route>
+          <Route path='/create-todo'>
+            <AddTodo />
+          </Route>
+        </Switch>
+      </div>  
     </Router>
     </main>
   );
